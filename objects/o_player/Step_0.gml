@@ -60,6 +60,12 @@ if (current_state == "Idle")
 		last_state = "Idle";
 		current_state = "Attack1";
 	}
+	else if (_attack_key && current_attack_combo >= 2)
+	{
+		image_index = 0;
+		last_state = "Idle";
+		current_state = "Attack2";
+	}
 }
 else if (current_state == "Move")
 {
@@ -94,6 +100,12 @@ else if (current_state == "Move")
 		last_state = "Move";
 		current_state = "Attack1";
 	}
+	else if (_attack_key && current_attack_combo >= 2)
+	{
+		image_index = 0;
+		last_state = "Move";
+		current_state = "Attack2";
+	}
 }
 else if (current_state == "Attack1")
 {
@@ -102,13 +114,27 @@ else if (current_state == "Attack1")
 	current_attack_combo = 1;
 	sprite_index = s_player_attack1;
 	
-	if !(instance_exists(o_attack1_collider))
+	if !(instance_exists(o_attack_collider))
 	{
 		var _x = x + 36 * image_xscale;
-		var _hit_box = instance_create_layer(_x, y, "Instances", o_attack1_collider);
+		var _hit_box = instance_create_layer(_x, y, "Instances", o_attack_collider);
 		_hit_box.alarm[0] = 0.1 * game_get_speed(gamespeed_fps);
 	}
 }
+else if (current_state == "Attack2")
+{
+	image_speed = attack_image_speed;
+	
+	sprite_index = s_player_attack2;
+	
+	if !(instance_exists(o_attack_collider))
+	{
+		var _x = x + 36 * image_xscale;
+		var _hit_box = instance_create_layer(_x, y, "Instances", o_attack_collider);
+		_hit_box.alarm[0] = 0.1 * game_get_speed(gamespeed_fps);
+	}
+}
+
 
 if (current_state == "Jump")
 {
@@ -132,7 +158,7 @@ if (current_state == "Jump")
 	}
 }
 
-if (current_state == "Idle" || current_state == "Jump" || current_state == "Attack1")
+if (current_state == "Idle" || current_state == "Jump" || current_state == "Attack1" || current_state == "Attack2")
 {
 	
 	if (vsp != 0)
@@ -144,3 +170,5 @@ if (current_state == "Idle" || current_state == "Jump" || current_state == "Atta
 		hsp = 0;
 	}
 }
+
+show_debug_message(current_state);

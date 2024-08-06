@@ -1,7 +1,7 @@
 {
   "resourceType": "GMObject",
   "resourceVersion": "1.0",
-  "name": "o_attack1_collider",
+  "name": "o_attack_collider",
   "spriteId": {
     "name": "s_player_attack1_collider",
     "path": "sprites/s_player_attack1_collider/s_player_attack1_collider.yy",
