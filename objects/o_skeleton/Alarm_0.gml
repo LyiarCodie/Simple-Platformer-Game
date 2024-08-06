@@ -1,6 +1,3 @@
-/// @description Insert description here
-// You can write your code in this editor
-
-taking_damage = 0;
-
-
+took_damage = 0;
+image_index = 0;
+current_state = "Idle";

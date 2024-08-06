@@ -7,7 +7,7 @@
     "path": "sprites/s_player_attack1_collider/s_player_attack1_collider.yy",
   },
   "solid": false,
-  "visible": true,
+  "visible": false,
   "managed": true,
   "spriteMaskId": null,
   "persistent": false,

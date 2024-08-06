@@ -4,8 +4,9 @@ var _right_key = keyboard_check(ord("D")) || keyboard_check(vk_right);
 var _left_key = -(keyboard_check(ord("A")) || keyboard_check(vk_left));
 var _jump_key = keyboard_check_pressed(vk_space);
 var _attack_key = keyboard_check_pressed(ord("J"));
+var _roll_key = keyboard_check_pressed(vk_shift);
 
-var _hor_dir = _left_key + _right_key;
+hor_dir = _left_key + _right_key;
 
 if (vsp < 10) {
 	vsp += grav * _dt;
@@ -36,16 +37,13 @@ if (place_meeting(x, y+vsp, o_floor))
 }
 y += vsp;
 #endregion
-
 if (current_state == "Idle")
 {
-	sprite_index = s_player_idle;
-	image_speed = idle_image_speed;
+	set_state_sprite(s_player_idle, idle_image_speed);
 	
-	if (_hor_dir != 0)
+	if (hor_dir != 0 && !place_meeting(x+hor_dir, y, o_floor))
 	{
 		current_state = "Move";
-		image_index = 0;
 	}
 	
 	if (_jump_key)
@@ -54,35 +52,33 @@ if (current_state == "Idle")
 		current_state = "Jump";
 	}
 	
-	if (_attack_key && current_attack_combo <= 0)
+	if (_attack_key)
 	{
-		image_index = 0;
-		last_state = "Idle";
 		current_state = "Attack1";
-	}
-	else if (_attack_key && current_attack_combo >= 2)
-	{
-		image_index = 0;
-		last_state = "Idle";
-		current_state = "Attack2";
 	}
 }
 else if (current_state == "Move")
 {
-	hsp = _hor_dir * move_speed * _dt;
-	image_speed = move_image_speed;
+	set_state_sprite(s_player_run, move_image_speed);
 	
-	if (_hor_dir < 0)
+	hsp = hor_dir * move_speed;
+	
+	if (!place_meeting(x+hor_dir, y, o_floor))
 	{
-		image_xscale = -1;
-		sprite_index = s_player_run;
+		if (hor_dir < 0)
+		{
+			image_xscale = -1;
+		}
+		else if (hor_dir > 0)
+		{
+			image_xscale = 1;
+		}
+		else 
+		{
+			current_state = "Idle";
+		}
 	}
-	else if (_hor_dir > 0)
-	{
-		image_xscale = 1;
-		sprite_index = s_player_run;
-	}
-	else 
+	else
 	{
 		image_index = 0;
 		current_state = "Idle";
@@ -94,25 +90,41 @@ else if (current_state == "Move")
 		current_state = "Jump";
 	}
 	
-	if (_attack_key && current_attack_combo <= 0)
+	if (_attack_key)
 	{
-		image_index = 0;
-		last_state = "Move";
 		current_state = "Attack1";
 	}
-	else if (_attack_key && current_attack_combo >= 2)
+	
+	if (_roll_key)
 	{
-		image_index = 0;
-		last_state = "Move";
-		current_state = "Attack2";
+		if (!place_meeting(x+move_speed*_dt*image_xscale, y, o_floor))
+		{
+			last_state = "Move";
+			current_state = "Roll";
+			hsp = hor_dir * roll_speed;
+		}
+		
 	}
 }
 else if (current_state == "Attack1")
 {
-	image_speed = attack_image_speed;
+	set_state_sprite(s_player_attack1, attack_image_speed);
 	
-	current_attack_combo = 1;
-	sprite_index = s_player_attack1;
+	if !(instance_exists(o_attack_collider))
+	{
+		var _x = x + 36 * image_xscale;
+		var _hit_box = instance_create_layer(_x, y, "Instances", o_attack_collider);
+		_hit_box.alarm[0] = 0.1 * game_get_speed(gamespeed_fps);
+	}
+	
+	if (_attack_key && animation_hit_frame_range(2))
+	{
+		current_state = "Attack2";
+	}
+}
+else if (current_state == "Attack2")
+{
+	set_state_sprite(s_player_attack2, attack_image_speed);
 	
 	if !(instance_exists(o_attack_collider))
 	{
@@ -121,18 +133,9 @@ else if (current_state == "Attack1")
 		_hit_box.alarm[0] = 0.1 * game_get_speed(gamespeed_fps);
 	}
 }
-else if (current_state == "Attack2")
+else if (current_state == "Roll")
 {
-	image_speed = attack_image_speed;
-	
-	sprite_index = s_player_attack2;
-	
-	if !(instance_exists(o_attack_collider))
-	{
-		var _x = x + 36 * image_xscale;
-		var _hit_box = instance_create_layer(_x, y, "Instances", o_attack_collider);
-		_hit_box.alarm[0] = 0.1 * game_get_speed(gamespeed_fps);
-	}
+	set_state_sprite(s_player_roll, roll_image_speed);
 }
 
 
@@ -144,8 +147,10 @@ if (current_state == "Jump")
 	}
 	if (vsp == 0)
 	{
-		image_index = 0;
-		current_state = last_state;
+		if (hor_dir != 0)
+			current_state = "Move";
+		else
+			current_state = "Idle";
 	}
 	
 	if (vsp < 0)
@@ -170,5 +175,3 @@ if (current_state == "Idle" || current_state == "Jump" || current_state == "Atta
 		hsp = 0;
 	}
 }
-
-show_debug_message(current_state);

@@ -9,7 +9,10 @@
   "solid": false,
   "visible": true,
   "managed": true,
-  "spriteMaskId": null,
+  "spriteMaskId": {
+    "name": "spr_skeleton_collider_mask",
+    "path": "sprites/spr_skeleton_collider_mask/spr_skeleton_collider_mask.yy",
+  },
   "persistent": false,
   "parentObjectId": null,
   "physicsObject": false,

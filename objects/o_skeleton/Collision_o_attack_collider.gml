@@ -1,8 +1,9 @@
-/// @description Insert description here
-// You can write your code in this editor
-
-taking_damage = 1;
-hit_flash = 1;
-hsp = 0;
-sprite_index = spr_skeleton_hurt;
-alarm[0] = 0.2 * game_get_speed(gamespeed_fps);
+if (!took_damage)
+{
+	took_damage = 1;
+	hit_flash = 1
+	current_state = "Damage";
+	damage_count++;
+	image_index = 0;
+	alarm[0] = 0.5 * game_get_speed(gamespeed_fps);
+}
