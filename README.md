@@ -6,10 +6,18 @@
 
 - Jump
 - Move
-- Attack (just 1 attack type)
+- Attack (player can combo attack)
+
+🎹 Keyboard Inputs:
+
+- A and D: move horizontally
+- Space: jump
+- J: Attack and pressing J again, you can make a combo.
 
 🧐 This is also the project that i implemented my first states machine.
 
 🎡 I used these free assets:
 
 - [Fantasy Knight - Free Pixelart Animated Character](https://aamatniekss.itch.io/fantasy-knight-free-pixelart-animated-character)
+
+![[/preview.gif]]
