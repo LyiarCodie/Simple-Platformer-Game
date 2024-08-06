@@ -1,0 +1,1 @@
+current_attack_combo = 0;
