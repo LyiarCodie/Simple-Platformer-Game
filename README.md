@@ -20,4 +20,4 @@
 
 - [Fantasy Knight - Free Pixelart Animated Character](https://aamatniekss.itch.io/fantasy-knight-free-pixelart-animated-character)
 
-![[/preview.gif]]
+![Preview](preview.gif)
